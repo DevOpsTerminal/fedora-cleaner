@@ -1,0 +1,37 @@
+name: Check Funding
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - '.github/FUNDING.yml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - '.github/FUNDING.yml'
+  workflow_dispatch:
+
+jobs:
+  check-funding:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Check FUNDING.yml exists
+        id: check_files
+        uses: andstor/file-existence-action@v2
+        with:
+          files: .github/FUNDING.yml
+          
+      - name: Validate FUNDING.yml syntax
+        if: steps.check_files.outputs.files_exists == 'true'
+        run: |
+          # Check if the file is a valid YAML
+          python3 -c 'import yaml, sys; yaml.safe_load(open(".github/FUNDING.yml"))'
+          echo "FUNDING.yml is valid YAML"
+          
+          # Check if at least one funding option is configured
+          FUNDING=$(cat .github/FUNDING.yml | grep -v '^#' | grep -v '^$' | wc -l)
+          if [ "$FUNDING" -lt 1 ]; then
+            echo "::warning file=.github/FUNDING.yml::No funding options are configured. Consider adding your funding links."
+          fi

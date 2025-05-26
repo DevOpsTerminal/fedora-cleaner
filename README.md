@@ -2,9 +2,26 @@
 
 **Interactive system cleanup and GPG fix tool for Fedora Linux**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Bash](https://img.shields.io/badge/Language-Bash-green.svg)](https://www.gnu.org/software/bash/)
 [![Fedora](https://img.shields.io/badge/OS-Fedora-blue.svg)](https://getfedora.org/)
+[![GitHub Sponsors](https://img.shields.io/badge/Support%20via-GitHub%20Sponsors-ea4aaa.svg)](https://github.com/sponsors/DevOpsTerminal)
+
+## 💖 Support
+
+If you find this project useful, please consider supporting its development. Your support helps ensure the project's continued maintenance and improvement.
+
+### Sponsorship
+
+You can support this project through [GitHub Sponsors](https://github.com/sponsors/DevOpsTerminal). Any level of support is greatly appreciated!
+
+### Other Ways to Contribute
+
+- ⭐ Star the repository
+- 🐛 Report bugs by opening an issue
+- 💡 Suggest new features or improvements
+- 📝 Improve the documentation
+- 🔄 Share the project with others
 
 ## 📖 Overview
 
@@ -68,39 +85,33 @@ curl -fsSL https://raw.githubusercontent.com/DevOpsTerminal/fedora-cleaner/main/
 ## 📊 Sample Output
 
 ```
-==================================================
-  🚀 Fedora Interactive Cleanup & GPG Fix v3.0
-==================================================
-
-🔐 Checking sudo access...
-✅ Sudo access confirmed
-
-=== DETAILED SYSTEM ANALYSIS ===
-
-📊 Current Disk Usage:
-  /dev/nvme0n1p7  147G  144G  2.6G  99% /
-
-📦 Package Cache Analysis:
-  → DNF cache: 1.2G (1,847 RPM files)
-  → PackageKit cache: 7.2G (3,291 RPM files)
-  → LibDNF5 cache: 44K
-
-🗂️ Temporary Files Analysis:
-  → System /tmp: 52K (12 files)
-  → User cache total: 5.6G
-  → Firefox cache: 2.1G
-  → Chrome cache: 800M
+=== CLEANUP PLAN GENERATOR ===
+Based on the analysis, here's what can be cleaned:
 
 📋 CLEANUP PLAN:
 
-1. [critical] Fix GPG signature issues
+1. [high] Clean package caches
+   💾 Space: 99M + 120M + 86M
+
+2. [medium] Clean browser caches
+   💾 Space: thumbnails
+
+3. [medium] Clean old log files
+   💾 Space: 3.9G potential
+
+4. [medium] Clean Flatpak (0
+0 unused apps)
+   💾 Space: 8.5G
+
+5. [high] Remove old kernels (1)
+   💾 Space: ~200MB each
+
+6. [low] Clean temporary files
+   💾 Space: 1.7G + 4.0K
+
+7. [critical] Fix GPG signature issues
    💾 Space: No space saved
 
-2. [high] Clean package caches
-   💾 Space: 1.2G + 7.2G + 44K
-
-3. [medium] Clean browser caches
-   💾 Space: firefox:2.1G chrome:800M
 
 === INTERACTIVE CLEANUP MENU ===
 Choose what you want to do:
@@ -108,6 +119,95 @@ Choose what you want to do:
 1. 🔑 Fix GPG signature issues (RECOMMENDED FIRST)
 2. 📦 Clean package caches
 3. 🌐 Clean browser caches
+4. 📰 Clean log files
+5. 📱 Clean Flatpak
+6. 🗑️  Remove old kernels
+7. 🗂️  Clean temporary files
+8. 🚀 Execute ALL cleanup steps
+9. 📊 Show disk usage summary
+0. ❌ Exit
+
+Enter your choice [1-9, 0 to exit]: 8
+Execute ALL cleanup steps? [y/N]: 
+y
+
+=== EXECUTING: Fix GPG signature issues ===
+[INFO] Fixing GPG signature issues...
+  → Removing old GPG keys...
+  → Importing Google Chrome GPG key...
+  → Importing Fedora GPG keys...
+  → Refreshing repository metadata...
+[SUCCESS] Step completed: Fix GPG signature issues
+
+=== EXECUTING: Clean package caches ===
+[INFO] Cleaning package caches...
+  → DNF cache before: 99M
+  → PackageKit cache before: 120M
+  → Cleaning DNF cache...
+  → Cleaning PackageKit cache...
+  → Cleaning libdnf5 cache...
+[SUCCESS] DNF cache after: 99M
+[SUCCESS] PackageKit cache after: 0
+[SUCCESS] Step completed: Clean package caches
+
+=== EXECUTING: Clean browser caches ===
+[INFO] Cleaning browser caches...
+  → Cleaning thumbnails cache (24M)...
+  → Cleaning Mozilla cache (368M)...
+  → Cleaning Chromium cache (49M)...
+[SUCCESS] Step completed: Clean browser caches
+
+=== EXECUTING: Clean log files ===
+[INFO] Cleaning log files...
+  → Journal size before: 
+  → Cleaning journal logs (keeping 30 days)...
+  → Journal size after: 
+  → Removing 29 old compressed log files...
+[SUCCESS] Step completed: Clean log files
+
+=== EXECUTING: Clean Flatpak ===
+[INFO] Cleaning Flatpak...
+./fedora-cleaner.sh: line 401: [: 0
+0: integer expression expected
+  → Cleaning Flatpak caches...
+  → Repairing Flatpak installation...
+[SUCCESS] Step completed: Clean Flatpak
+
+=== EXECUTING: Remove old kernels ===
+[INFO] Removing old kernels...
+  → Current kernels:
+  kernel-6.14.4-300.fc42.x86_64
+  kernel-6.14.5-300.fc42.x86_64
+  kernel-6.14.6-300.fc42.x86_64
+  → Removing old kernels (keeping latest 2)...
+[SUCCESS] Kernels remaining: 2
+[SUCCESS] Step completed: Remove old kernels
+
+=== EXECUTING: Clean temporary files ===
+[INFO] Cleaning temporary files...
+  → Cleaning /tmp (files older than 7 days)...
+  → Cleaning /var/tmp (files older than 7 days)...
+  → Removing 1 old files from /var/tmp...
+[SUCCESS] Step completed: Clean temporary files
+[SUCCESS] 🎉 All cleanup steps completed!
+
+Press Enter to continue...
+
+
+=== INTERACTIVE CLEANUP MENU ===
+Choose what you want to do:
+
+1. 🔑 Fix GPG signature issues (RECOMMENDED FIRST)
+2. 📦 Clean package caches
+3. 🌐 Clean browser caches
+4. 📰 Clean log files
+5. 📱 Clean Flatpak
+6. 🗑️  Remove old kernels
+7. 🗂️  Clean temporary files
+8. 🚀 Execute ALL cleanup steps
+9. 📊 Show disk usage summary
+0. ❌ Exit
+
 ...
 ```
 
