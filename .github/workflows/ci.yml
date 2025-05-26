@@ -1,0 +1,122 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    # Weekly builds
+    - cron: '0 0 * * 0'
+
+jobs:
+  test:
+    name: Test on ${{ matrix.distro }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [fedora:latest, ubuntu:latest, debian:latest, centos:latest, archlinux:latest]
+    container:
+      image: ${{ matrix.distro }}
+      # Use bash for all containers
+      options: --entrypoint /bin/bash
+    steps:
+      - name: Install dependencies
+        run: |
+          # Common dependencies
+          if command -v apt-get &> /dev/null; then
+              apt-get update
+              apt-get install -y sudo bash coreutils findutils grep sed gawk
+          elif command -v dnf &> /dev/null; then
+              dnf install -y sudo bash coreutils findutils grep sed gawk
+          elif command -v yum &> /dev/null; then
+              yum install -y sudo bash coreutils findutils grep sed gawk
+          elif command -v pacman &> /dev/null; then
+              pacman -Sy --noconfirm sudo bash coreutils findutils grep sed gawk
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          check_files: 'fedora-cleaner.sh'
+
+      - name: Run tests
+        run: |
+          # Make script executable
+          chmod +x fedora-cleaner.sh
+          
+          # Test help
+          ./fedora-cleaner.sh --help
+          
+          # Test dry run
+          ./fedora-cleaner.sh --dry-run
+          
+          # Test version
+          ./fedora-cleaner.sh --version || true
+
+  build:
+    name: Build Package
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+          pip install --upgrade pip setuptools wheel
+          pip install twine
+
+      - name: Build documentation
+        run: make docs
+
+      - name: Build package
+        run: make package
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: package
+          path: dist/
+
+  deploy-docs:
+    name: Deploy Documentation
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
+
+      - name: Build and deploy
+        env:
+          JEKYLL_ENV: production
+        run: |
+          gem install bundler
+          bundle install
+          bundle exec jekyll build --destination docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
