@@ -1,0 +1,20 @@
+title: Fedora Cleaner
+description: Interactive system cleanup and GPG fix tool for Linux distributions
+baseurl: /fedora-cleaner
+url: https://devopsterminal.github.io
+repository: DevOpsTerminal/fedora-cleaner
+show_downloads: true
+email: tom@sapletta.com
+author:
+  name: Tom Sapletta
+  url: https://tom.sapletta.com
+  github: tom-sapletta-com
+twitter_username: tomsapletta
+github_username: DevOpsTerminal
+include: ['_pages']
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+theme: jekyll-theme-cayman
