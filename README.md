@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Bash](https://img.shields.io/badge/Language-Bash-green.svg)](https://www.gnu.org/software/bash/)
 [![Fedora](https://img.shields.io/badge/OS-Fedora-blue.svg)](https://getfedora.org/)
-[![GitHub Sponsors](https://img.shields.io/badge/Support%20via-GitHub%20Sponsors-ea4aaa.svg)](https://github.com/sponsors/DevOpsTerminal)
+[![GitHub Sponsors](https://img.shields.io/badge/Support%20via-GitHub%20Sponsors-ea4aaa.svg)](https://github.com/sponsors/tom-sapletta-com)
 
 ## 💖 Support
 
@@ -13,7 +13,7 @@ If you find this project useful, please consider supporting its development. You
 
 ### Sponsorship
 
-You can support this project through [GitHub Sponsors](https://github.com/sponsors/DevOpsTerminal). Any level of support is greatly appreciated!
+You can support this project through [GitHub Sponsors](https://github.com/sponsors/tom-sapletta-com). Any level of support is greatly appreciated!
 
 ### Other Ways to Contribute
 
